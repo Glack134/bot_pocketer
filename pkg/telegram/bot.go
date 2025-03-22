@@ -3,6 +3,8 @@ package telegram
 import (
 	"tg_bot/pkg/config"
 	"tg_bot/pkg/storage"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 type Bot struct {

@@ -1,6 +1,10 @@
 package telegram
 
-import "errors"
+import (
+	"errors"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+)
 
 var (
 	invalidUrlError   = errors.New("url is valid")

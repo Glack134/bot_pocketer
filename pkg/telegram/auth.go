@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"tg_bot/pkg/storage"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 func (b *Bot) initAuthorizationProcess(message *tgbotapi.Message) error {

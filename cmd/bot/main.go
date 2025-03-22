@@ -3,10 +3,12 @@ package main
 import (
 	"log"
 	"tg_bot/pkg/config"
+	"tg_bot/pkg/telegram"
 
 	"github.com/boltdb/bolt"
 	"github.com/containerd/containerd/snapshots/storage"
 	"github.com/docker/docker/api/server"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 func main() {
