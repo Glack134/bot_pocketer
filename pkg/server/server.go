@@ -1,7 +1,10 @@
 package server
 
 import (
+	"context"
+	"errors"
 	"net/http"
+	"strconv"
 	"tg_bot/pkg/storage"
 
 	"go.uber.org/zap"
@@ -47,5 +50,47 @@ func (s *AuthServer) ServerHTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
-	//next
+
+	chatIDQuery := r.URL.Query().Get("chat_id")
+	if chatIDQuery == "" {
+		s.logger.Debug("received empty chat_id query param")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	chatID, err := strconv.ParseInt(chatIDQuery, 10, 64)
+	if err != nil {
+		s.logger.Debug("received invalid chat_id query param",
+			zap.String("chat_id", chatIDQuery))
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if err := s.createAccessToken(r.Context(), chatID); err != nil {
+		s.logger.Debug("failed to create access token",
+			zap.String("err", err.Error()))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Location", s.redirectUrl)
+	w.WriteHeader(http.StatusMovedPermanently)
+}
+
+func (s *AuthServer) createAccessToken(ctx context.Context, chatID int64) error {
+	requestToken, err := s.storage.Get(chatID, storage.RequestTokens)
+	if err != nil {
+		return errors.WithMessage(err, "failed to get request token")
+	}
+
+	authResp, err := s.client.Authorize(ctx, requestToken)
+	if err != nil {
+		return errors.WithMessage(err, "failed to authorize at Pocket")
+	}
+
+	if err := s.storage.Save(chatID, authResp.AccessToken, storage.AccessTokens); err != nil {
+		return errors.WithMessage(err, "failed to save access token to storage")
+	}
+
+	return nil
 }
