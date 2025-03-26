@@ -7,7 +7,7 @@ import (
 	"github.com/go-telegram/bot/models"
 	"github.com/polyk005/tg_bot/internal/config"
 	"github.com/polyk005/tg_bot/internal/delivery/telegram"
-	"github.com/polyk005/tg_bot/internal/repository/postgres"
+	"github.com/polyk005/tg_bot/internal/repository/inmemory"
 	"github.com/polyk005/tg_bot/internal/service"
 	"github.com/polyk005/tg_bot/pkg/logger"
 )
@@ -19,11 +19,12 @@ type Bot struct {
 }
 
 func NewBot(cfg *config.Config, log logger.Logger) (*Bot, error) {
-	repo, err := postgres.New(context.Background(), cfg.Database.DSN)
-	if err != nil {
-		log.Error("Failed to initialize repository", "error", err)
-		return nil, err
-	}
+	repo := inmemory.New() // вместо postgres.New //postgres.New(context.Background(), cfg.Database.DSN)
+	log.Info("Using in-memory repository for testing")
+	// if err != nil {
+	// 	log.Error("Failed to initialize repository", "error", err)
+	// 	return nil, err
+	// }
 
 	svc := service.New(repo, log)
 

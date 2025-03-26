@@ -1,5 +1,5 @@
 telegram:
-  token: "YOUR_BOT_TOKEN"
+  token: "7863271218:AAFmGeX3Ordmwh3b65prxa_DkxAuNIbFUl0"
 database:
-  dsn: "postgres://user:password@localhost:5432/dbname?sslmode=disable"
+  dsn: "postgres://postgres:postgres@localhost:5432/tg_bot?sslmode=disable"
 log_level: "debug"
