@@ -1,0 +1,5 @@
+telegram:
+  token: "YOUR_BOT_TOKEN"
+database:
+  dsn: "postgres://user:password@localhost:5432/dbname?sslmode=disable"
+log_level: "debug"

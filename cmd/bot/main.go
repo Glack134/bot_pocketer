@@ -1,29 +1,31 @@
-package cmd
+package main
 
 import (
 	"fmt"
 	"log"
 
-	"github.com/containerd/containerd/cmd/ctr/app"
+	"github.com/polyk005/tg_bot/internal/app"
 	"github.com/polyk005/tg_bot/internal/config"
+	"github.com/polyk005/tg_bot/pkg/logger"
 )
 
 func main() {
-	fmt.Println("Start Bot to @tg_bot_chirik_10")
+	fmt.Println("Starting Telegram Bot...")
 
 	cfg, err := config.Load("config.yaml")
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	logger := logger.New(cfg.LogLevel)
+	log := logger.New(cfg.LogLevel)
+	defer log.Sync()
 
-	bot, err := app.NewBot(cfg, logger)
+	bot, err := app.NewBot(cfg, log)
 	if err != nil {
-		logger.Fatal("Failed to create bot", "error", err)
+		log.Fatal("Failed to create bot", "error", err)
 	}
 
 	if err := bot.Run(); err != nil {
-		logger.Fatal("Bot stopped with error", "error", err)
+		log.Fatal("Bot stopped with error", "error", err)
 	}
 }
