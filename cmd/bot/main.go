@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/containerd/containerd/cmd/ctr/app"
+	"github.com/polyk005/tg_bot/internal/config"
 )
 
 func main() {
