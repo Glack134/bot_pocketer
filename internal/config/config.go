@@ -13,7 +13,8 @@ type Config struct {
 	Database struct {
 		DSN string `yaml:"dsn"`
 	} `yaml:"database"`
-	LogLevel string `yaml:"log_level"`
+	LogLevel  string `yaml:"log_level"`
+	OpenAIKey string `yaml:"openai_key"`
 }
 
 func Load(path string) (*Config, error) {
